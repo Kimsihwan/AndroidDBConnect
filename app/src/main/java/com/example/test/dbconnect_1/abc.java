@@ -182,7 +182,7 @@ public class abc extends AppCompatActivity {
             String searchKeyword = params[0];
 
 
-            String serverURL = "http://211.236.54.253/query.php";
+            String serverURL = "http://172.16.14.23/id_check.php";
 
             String postParameters = "country=" + searchKeyword;
 

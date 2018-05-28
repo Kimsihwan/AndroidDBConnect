@@ -24,8 +24,8 @@ public class insert extends AppCompatActivity {
     private static final String TAG = "insert";
 
     private EditText name, telNum, eMail;
-    private Button btnSend, btnSearch;
-    private TextView txt;
+    private Button btnSend, btnSearch, btncheck;
+    String mJsonString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,6 @@ public class insert extends AppCompatActivity {
         name = (EditText)findViewById(R.id.editName);
         telNum = (EditText)findViewById(R.id.editTel);
         eMail = (EditText) findViewById(R.id.editEmail);
-        txt = (TextView) findViewById(R.id.txt);
 
         btnSend = (Button)findViewById(R.id.btnSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +66,19 @@ public class insert extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btncheck = (Button) findViewById(R.id.btncheck);
+        btncheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                GetData task = new GetData();
+                task.execute(name.getText().toString());
+
+            }
+        });
+
 
     }
 
@@ -105,7 +117,7 @@ public class insert extends AppCompatActivity {
             String telNo = (String)params[1];
             String eMail = (String)params[2];
 
-            String serverURL = "http://211.236.54.253/insert_data.php";
+            String serverURL = "http://172.16.14.23/insert_data.php";
             String postParameters = "name=" + name + "&telNo=" + telNo + "&eMail=" + eMail;
 
 
@@ -158,6 +170,129 @@ public class insert extends AppCompatActivity {
             }
 
         }
+    }
+
+    private class GetData extends AsyncTask<String, Void, String>{
+
+
+        ProgressDialog progressDialog;
+
+        String errorString = null;
+
+
+        @Override
+
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+
+            progressDialog = ProgressDialog.show(insert.this, "Please Wait", null, true, true);
+
+        }
+
+
+
+        @Override
+
+        protected void onPostExecute(String result) {
+
+            super.onPostExecute(result);
+            //Log.d(TAG, "response - " + result);
+
+
+            progressDialog.dismiss();
+            if(result.equals("2")){
+                Toast.makeText(insert.this, "사용할 수 있는 아이디 입니다.", Toast.LENGTH_SHORT).show();
+            } else if(result.equals("-2")){
+                Toast.makeText(insert.this, "중복입니다.", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+
+
+        @Override
+
+        protected String doInBackground(String... params) {
+
+            String searchKeyword = params[0];
+            String serverURL = "http://172.16.14.23/id_check.php";
+            String postParameters = "country=" + searchKeyword;
+
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(7000);
+                httpURLConnection.setConnectTimeout(7000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+
+                }
+
+
+
+                bufferedReader.close();
+
+
+
+                return sb.toString().trim();
+
+
+
+            } catch (Exception e) {
+
+
+                Log.d(TAG, "InsertData: Error ", e);
+
+                errorString = e.toString();
+
+
+                return null;
+
+            }
+
+
+        }
+
     }
 
 }
