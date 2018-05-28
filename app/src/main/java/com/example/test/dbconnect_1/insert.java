@@ -25,7 +25,20 @@ public class insert extends AppCompatActivity {
 
     private EditText name, telNum, eMail;
     private Button btnSend, btnSearch, btncheck;
-    String mJsonString;
+
+    private boolean emptyCheck(){
+        if(name.getText().toString().replace(" ", "").equals("")){
+            Toast.makeText(getApplicationContext(), "이름입력하세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(telNum.getText().toString().replace(" ", "").equals("")){
+            Toast.makeText(getApplicationContext(), "휴대폰입력하세요", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(eMail.getText().toString().replace(" ", "").equals("")) {
+            Toast.makeText(getApplicationContext(), "이메일입력하세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,23 +49,27 @@ public class insert extends AppCompatActivity {
         telNum = (EditText)findViewById(R.id.editTel);
         eMail = (EditText) findViewById(R.id.editEmail);
 
+
+
         btnSend = (Button)findViewById(R.id.btnSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String sname = name.getText().toString();
-                String stelNum = telNum.getText().toString();
-                String seMail = eMail.getText().toString();
+                    if(emptyCheck() == true) {
 
-                InsertData task = new InsertData();
-                task.execute(sname,stelNum,seMail);
+                        String sname = name.getText().toString();
+                        String stelNum = telNum.getText().toString();
+                        String seMail = eMail.getText().toString();
+
+                        InsertData task = new InsertData();
+                        task.execute(sname, stelNum, seMail);
 
 
-                name.setText("");
-                telNum.setText("");
-                eMail.setText("");
-
+                        name.setText("");
+                        telNum.setText("");
+                        eMail.setText("");
+                    }
 
 
             }
@@ -73,7 +90,7 @@ public class insert extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                GetData task = new GetData();
+                CheckIdData task = new CheckIdData();
                 task.execute(name.getText().toString());
 
             }
@@ -172,7 +189,7 @@ public class insert extends AppCompatActivity {
         }
     }
 
-    private class GetData extends AsyncTask<String, Void, String>{
+    private class CheckIdData extends AsyncTask<String, Void, String>{
 
 
         ProgressDialog progressDialog;
