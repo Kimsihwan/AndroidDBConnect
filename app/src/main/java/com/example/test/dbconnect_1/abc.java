@@ -64,13 +64,9 @@ public class abc extends AppCompatActivity {
     private static final String TAG_Tel ="telNo";
     private static final String TAG_email ="eMail";
 
-
     ArrayList<HashMap<String, String>> mArrayList;
-
     ListView mListViewList;
-
     EditText mEditTextSearchKeyword;
-
     String mJsonString;
 
 
@@ -78,62 +74,34 @@ public class abc extends AppCompatActivity {
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.abc);
 
-
         mListViewList = (ListView) findViewById(R.id.listView_main_list);
-
         mEditTextSearchKeyword = (EditText) findViewById(R.id.editText_main_searchKeyword);
-
-
         Button button_search = (Button) findViewById(R.id.button_main_search);
-
         button_search.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
-
-
                 mArrayList.clear();
-
-
-
                 GetData task = new GetData();
-
                 task.execute( mEditTextSearchKeyword.getText().toString());
-
             }
-
         });
 
-
-
         mArrayList = new ArrayList<>();
-
-
 
     }
 
 
 
     private class GetData extends AsyncTask<String, Void, String>{
-
-
         ProgressDialog progressDialog;
-
         String errorString = null;
 
 
         @Override
-
         protected void onPreExecute() {
-
             super.onPreExecute();
-
-
             progressDialog = ProgressDialog.show(abc.this,
 
                     "Please Wait", null, true, true);
@@ -147,27 +115,13 @@ public class abc extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             super.onPostExecute(result);
-
-
             progressDialog.dismiss();
-
-
-
             Log.d(TAG, "response - " + result);
-
-
             if (result == null){
-
-
             }
-
             else {
-
-
                 mJsonString = result;
-
                 showResult();
-
             }
 
         }
@@ -182,7 +136,8 @@ public class abc extends AppCompatActivity {
             String searchKeyword = params[0];
 
 
-            String serverURL = "http://172.16.14.23/id_check.php";
+            //String serverURL = "http://211.236.54.253/query.php";
+            String serverURL = "http://duden1594.dothome.co.kr/select_data.php";
 
             String postParameters = "country=" + searchKeyword;
 
@@ -215,7 +170,6 @@ public class abc extends AppCompatActivity {
                 outputStream.flush();
 
                 outputStream.close();
-
 
 
                 int responseStatusCode = httpURLConnection.getResponseCode();

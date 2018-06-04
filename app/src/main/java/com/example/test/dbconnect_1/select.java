@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 public class select extends AppCompatActivity {
 
-    String serverURL = "http://192.168.132.1/select.php";
+    //String serverURL = "http://192.168.132.1/select.php";
     private static String TAG = "phpquerytest";
 
     private static final String TAG_JSON="webnautes";

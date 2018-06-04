@@ -134,7 +134,9 @@ public class insert extends AppCompatActivity {
             String telNo = (String)params[1];
             String eMail = (String)params[2];
 
-            String serverURL = "http://172.16.14.23/insert_data.php";
+            //String serverURL = "http://211.236.54.253/insert_data.php";
+            String serverURL = "http://duden1594.dothome.co.kr/insert_data.php";
+
             String postParameters = "name=" + name + "&telNo=" + telNo + "&eMail=" + eMail;
 
 
@@ -144,8 +146,8 @@ public class insert extends AppCompatActivity {
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
 
-//                httpURLConnection.setReadTimeout(5000);
-//                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.connect();
 
@@ -234,7 +236,7 @@ public class insert extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             String searchKeyword = params[0];
-            String serverURL = "http://172.16.14.23/id_check.php";
+            String serverURL = "http://duden1594.dothome.co.kr/id_check.php";
             String postParameters = "country=" + searchKeyword;
 
 
